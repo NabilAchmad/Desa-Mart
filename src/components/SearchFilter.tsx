@@ -9,23 +9,32 @@ export default function SearchFilter() {
   
   const currentCategory = searchParams.get('category') || '';
   const currentQ = searchParams.get('q') || '';
+  const currentSort = searchParams.get('sort') || 'newest';
   
   const [q, setQ] = useState(currentQ);
+  const [sort, setSort] = useState(currentSort);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    updateQuery(q, currentCategory);
+    updateQuery(q, currentCategory, sort);
   };
 
   const handleCategoryClick = (cat: string) => {
     const newCat = currentCategory === cat ? '' : cat;
-    updateQuery(q, newCat);
+    updateQuery(q, newCat, sort);
   };
 
-  const updateQuery = (search: string, cat: string) => {
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newSort = e.target.value;
+    setSort(newSort);
+    updateQuery(q, currentCategory, newSort);
+  };
+
+  const updateQuery = (search: string, cat: string, srt: string) => {
     const params = new URLSearchParams();
     if (search) params.set('q', search);
     if (cat) params.set('category', cat);
+    if (srt && srt !== 'newest') params.set('sort', srt);
     
     // Always navigate to #produk to show results
     router.push(`/?${params.toString()}#produk`, { scroll: false });

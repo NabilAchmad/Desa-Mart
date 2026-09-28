@@ -20,6 +20,9 @@ export default function DashboardSidebar({ activeOrdersCount, incomingOrdersCoun
             <span>📦 Pesanan Saya</span>
             {activeOrdersCount > 0 && <span style={{ background: '#ef4444', color: 'white', borderRadius: '12px', padding: '2px 8px', fontSize: '0.75rem' }}>{activeOrdersCount}</span>}
           </Link>
+          <Link href="/dashboard/wishlist" className={`sidebar-link ${pathname === '/dashboard/wishlist' ? 'active' : ''}`}>
+            ❤️ Favorit Saya
+          </Link>
           
           <hr style={{ margin: '8px 0', border: 'none', borderTop: '1px solid var(--border)' }} />
           
@@ -32,6 +35,9 @@ export default function DashboardSidebar({ activeOrdersCount, incomingOrdersCoun
           <Link href="/dashboard/pesanan-masuk" className={`sidebar-link ${pathname === '/dashboard/pesanan-masuk' ? 'active' : ''}`} style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span>📥 Pesanan Masuk</span>
             {incomingOrdersCount > 0 && <span style={{ background: '#ef4444', color: 'white', borderRadius: '12px', padding: '2px 8px', fontSize: '0.75rem' }}>{incomingOrdersCount}</span>}
+          </Link>
+          <Link href="/dashboard/statistik" className={`sidebar-link ${pathname === '/dashboard/statistik' ? 'active' : ''}`}>
+            📊 Statistik Toko
           </Link>
         </nav>
       </div>
