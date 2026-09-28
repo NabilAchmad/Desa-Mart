@@ -1,0 +1,182 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  USER
+  VILLAGE_HEAD
+  ADMIN
+}
+
+enum OrderStatus {
+  UNPAID
+  PENDING
+  SHIPPED
+  COMPLETED
+  CANCELLED
+}
+
+enum VillageStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  phone     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  store             Store?
+  orders            Order[]
+  shippingAddresses ShippingAddress[]
+  cartItems         CartItem[]
+  reviews           Review[]
+  wishlists         Wishlist[]
+}
+
+model CartItem {
+  id        String  @id @default(cuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int     @default(1)
+}
+
+model ShippingAddress {
+  id         String  @id @default(cuid())
+  userId     String
+  user       User    @relation(fields: [userId], references: [id])
+  recipient  String
+  phone      String
+  street     String
+  district   String
+  city       String
+  province   String
+  postalCode String
+  isDefault  Boolean @default(false)
+}
+
+model Village {
+  id           String        @id @default(cuid())
+  name         String
+  district     String // Kecamatan
+  city         String // Kabupaten/Kota
+  province     String // Provinsi
+  headName     String // Nama Kepala Desa
+  contactPhone String
+  latitude     Float // Titik pusat desa
+  longitude    Float
+  radiusMeters Int           @default(1200) // 1200m radius ~ kurang lebih 450-500 hektar
+  status       VillageStatus @default(PENDING)
+
+  stores    Store[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Store {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  ownerId     String    @unique
+  owner       User      @relation(fields: [ownerId], references: [id])
+  villageId   String
+  village     Village   @relation(fields: [villageId], references: [id])
+  latitude    Float // Lokasi toko fisik (untuk validasi radius)
+  longitude   Float
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Product {
+  id          String      @id @default(cuid())
+  name        String
+  description String?
+  price       Float
+  stock       Int         @default(0)
+  imageUrl    String?
+  storeId     String
+  store       Store       @relation(fields: [storeId], references: [id])
+  categoryId  String
+  category    Category    @relation(fields: [categoryId], references: [id])
+  orderItems  OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  cartItems   CartItem[]
+  reviews     Review[]
+  wishlists   Wishlist[]
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String
+  products Product[]
+}
+
+model Order {
+  id           String      @id @default(cuid())
+  userId       String
+  user         User        @relation(fields: [userId], references: [id])
+  status       OrderStatus @default(UNPAID)
+  total        Float
+  shippingCost Float       @default(0) // Ongkos kirim
+
+  // Midtrans integrasi
+  paymentUrl String? // Link pembayaran Midtrans Snap
+  midtransId String? // Order ID di sistem Midtrans
+
+  shippingAddressId String? // Referensi alamat pengiriman
+
+  items     OrderItem[]
+  reviews   Review[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Float
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  orderId   String?
+  order     Order?   @relation(fields: [orderId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+}
