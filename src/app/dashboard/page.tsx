@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma'
 import { getSession } from '@/lib/session'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
+import ModalWrapper from '@/components/ModalWrapper'
 import '@/app/pengajuan-desa/pengajuan.css'
 
 export const metadata = {
@@ -39,31 +40,33 @@ export default async function Dashboard() {
       <h2 style={{ marginBottom: '8px', fontSize: '2rem' }}>Profil Pengguna</h2>
       <p style={{ color: 'var(--text-muted)', marginBottom: '32px' }}>Kelola informasi pribadi Anda di sini.</p>
 
-      <form action={updateProfile} className="pengajuan-form" style={{ maxWidth: '600px' }}>
-        <div className="input-group">
-          <label>Email (Tidak dapat diubah)</label>
-          <input type="email" value={user?.email} readOnly style={{ background: 'var(--background)', color: 'var(--text-muted)', cursor: 'not-allowed' }} />
-        </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', background: 'var(--background)', padding: '24px', borderRadius: '12px', border: '1px solid var(--border)', marginBottom: '32px' }}>
+        <div><strong>Nama Lengkap:</strong> <span style={{ color: 'var(--text-main)' }}>{user?.name}</span></div>
+        <div><strong>Email:</strong> <span style={{ color: 'var(--text-main)' }}>{user?.email}</span></div>
+        <div><strong>Nomor Telepon:</strong> <span style={{ color: 'var(--text-main)' }}>{user?.phone || 'Belum diatur'}</span></div>
+        <div><strong>Status Toko:</strong> <span style={{ color: 'var(--text-main)' }}>{user?.store ? `Terdaftar (${user.store.name})` : 'Belum Memiliki Toko'}</span></div>
+      </div>
 
-        <div className="input-group">
-          <label>Nama Lengkap</label>
-          <input type="text" name="name" defaultValue={user?.name!} required />
-        </div>
-
-        <div className="input-group">
-          <label>Nomor Telepon (WhatsApp)</label>
-          <input type="tel" name="phone" defaultValue={user?.phone!} required />
-        </div>
-
-        <div className="input-group">
-          <label>Status Toko</label>
-          <div style={{ display: 'inline-block', padding: '12px 16px', background: 'var(--background)', border: '1px solid var(--border)', borderRadius: '8px', color: user?.store ? 'var(--primary-dark)' : 'var(--text-muted)' }}>
-            {user?.store ? `Toko Terdaftar (${user.store.name})` : 'Belum Memiliki Toko'}
+      <ModalWrapper title="Edit Profil" triggerText="Edit Profil">
+        <form action={updateProfile} className="pengajuan-form">
+          <div className="input-group">
+            <label>Email (Tidak dapat diubah)</label>
+            <input type="email" value={user?.email} readOnly style={{ background: 'var(--background)', color: 'var(--text-muted)', cursor: 'not-allowed' }} />
           </div>
-        </div>
 
-        <button type="submit" className="btn-primary w-full mt-4">Simpan Perubahan</button>
-      </form>
+          <div className="input-group">
+            <label>Nama Lengkap</label>
+            <input type="text" name="name" defaultValue={user?.name!} required />
+          </div>
+
+          <div className="input-group">
+            <label>Nomor Telepon (WhatsApp)</label>
+            <input type="tel" name="phone" defaultValue={user?.phone!} required />
+          </div>
+
+          <button type="submit" className="btn-primary w-full mt-4">Simpan Perubahan</button>
+        </form>
+      </ModalWrapper>
     </div>
   )
 }

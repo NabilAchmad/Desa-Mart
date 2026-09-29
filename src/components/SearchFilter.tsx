@@ -45,6 +45,10 @@ export default function SearchFilter() {
     { name: 'Madu & Rempah', icon: '🍯' },
     { name: 'Jajanan & Cemilan', icon: '🍪' },
     { name: 'Kerajinan Tangan', icon: '🧺' },
+    { name: 'Pakaian & Fashion', icon: '👕' },
+    { name: 'Bahan Pokok & Sembako', icon: '🍚' },
+    { name: 'Kesehatan & Herbal Tradisional', icon: '🌿' },
+    { name: 'Daging & Ikan', icon: '🥩' },
     { name: 'Tanaman Hias', icon: '🪴' }
   ];
 
@@ -86,13 +90,13 @@ export default function SearchFilter() {
               onClick={() => handleCategoryClick(c.name)}
               style={{
                 borderColor: isActive ? 'var(--primary)' : 'transparent',
-                background: isActive ? 'white' : 'var(--background)',
-                boxShadow: isActive ? 'var(--shadow-md)' : 'none',
-                transform: isActive ? 'translateY(-4px)' : 'none'
+                background: isActive ? 'rgba(76, 175, 80, 0.05)' : 'var(--surface)',
+                boxShadow: isActive ? '0 4px 20px rgba(76, 175, 80, 0.15)' : 'none',
+                transform: isActive ? 'translateY(-8px)' : 'none'
               }}
             >
               <span className="cat-icon">{c.icon}</span>
-              <div className="cat-name" style={{ color: isActive ? 'var(--primary-dark)' : 'var(--text-main)' }}>{c.name}</div>
+              <div className="cat-name" style={{ color: isActive ? 'var(--primary)' : 'var(--text-main)' }}>{c.name}</div>
             </div>
           );
         })}

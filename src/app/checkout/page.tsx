@@ -6,17 +6,19 @@ import CheckoutButton from '@/components/CheckoutButton'
 
 export const metadata = { title: 'Checkout - DesaMart' }
 
-export default async function CheckoutPage({ searchParams }: { searchParams: { items?: string } }) {
+export default async function CheckoutPage({ searchParams }: { searchParams: Promise<{ items?: string }> }) {
+  const resolvedSearchParams = await searchParams;
   const session = await getSession()
   if (!session) redirect('/login')
 
   let whereClause: any = { userId: session.userId };
-  if (searchParams.items) {
-    whereClause.id = { in: searchParams.items.split(',') };
+  if (resolvedSearchParams.items) {
+    whereClause.id = { in: resolvedSearchParams.items.split(',') };
   }
 
   const cartItems = await prisma.cartItem.findMany({
     where: whereClause,
+    orderBy: { id: 'asc' },
     include: { product: true }
   })
 
@@ -35,7 +37,9 @@ export default async function CheckoutPage({ searchParams }: { searchParams: { i
   return (
     <div className="container" style={{ padding: '40px 24px', minHeight: '80vh', maxWidth: '800px', margin: '0 auto' }}>
       
-      <Link href="/keranjang" className="btn-outline" style={{ display: 'inline-block', marginBottom: '24px', border: 'none', background: 'white' }}>← Kembali ke Keranjang</Link>
+      <Link href="/keranjang" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '24px', color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 600 }}>
+        &larr; Kembali ke Keranjang
+      </Link>
       <h1>Penyelesaian Pesanan</h1>
       
       <div className="form-card" style={{ padding: '32px', marginTop: '32px' }}>
@@ -54,8 +58,18 @@ export default async function CheckoutPage({ searchParams }: { searchParams: { i
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '32px', paddingTop: '16px', borderTop: '2px dashed var(--border)' }}>
+          <h4 style={{ margin: 0, color: 'var(--text-muted)' }}>Subtotal Produk</h4>
+          <h4 style={{ margin: 0, color: 'var(--text-main)' }}>Rp {total.toLocaleString('id-ID')}</h4>
+        </div>
+        
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px' }}>
+          <h4 style={{ margin: 0, color: 'var(--text-muted)' }}>Ongkos Kirim</h4>
+          <h4 style={{ margin: 0, color: 'var(--text-main)' }}>Rp 10.000</h4>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border)' }}>
           <h3 style={{ margin: 0 }}>Total Belanja</h3>
-          <h3 style={{ margin: 0, color: 'var(--primary)' }}>Rp {total.toLocaleString('id-ID')}</h3>
+          <h3 style={{ margin: 0, color: 'var(--primary)' }}>Rp {(total + 10000).toLocaleString('id-ID')}</h3>
         </div>
 
         <CheckoutButton clientKey={clientKey} itemIds={cartItems.map(i => i.id)} savedAddresses={savedAddresses} />

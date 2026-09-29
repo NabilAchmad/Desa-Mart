@@ -56,9 +56,12 @@ export async function openStore(formData: FormData) {
         longitude
       }
     });
-  } catch (error) {
-    console.error(error);
-    return { error: 'Gagal membuka toko. Anda mungkin sudah memiliki toko.' };
+  } catch (error: any) {
+    if (error.code === 'P2002') {
+      return { error: 'Anda sudah memiliki toko yang terdaftar.' };
+    }
+    console.error("Store creation error:", error);
+    return { error: 'Terjadi kesalahan sistem saat membuka toko.' };
   }
 
   redirect('/dashboard');

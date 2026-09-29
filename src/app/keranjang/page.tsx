@@ -13,6 +13,7 @@ export default async function Keranjang() {
 
   const cartItems = await prisma.cartItem.findMany({
     where: { userId: session.userId },
+    orderBy: { id: 'asc' },
     include: { product: { include: { store: true } } }
   })
 

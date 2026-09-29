@@ -11,11 +11,17 @@ export async function addToCart(formData: FormData) {
   const productId = formData.get('productId') as string;
   
   try {
+    const product = await prisma.product.findUnique({ where: { id: productId } });
+    if (!product || product.stock < 1) throw new Error('Stok tidak cukup');
+
     const existing = await prisma.cartItem.findFirst({
       where: { userId: session.userId, productId }
     });
 
     if (existing) {
+      if (existing.quantity + 1 > product.stock) {
+        throw new Error('Maksimal stok tercapai');
+      }
       await prisma.cartItem.update({
         where: { id: existing.id },
         data: { quantity: existing.quantity + 1 }
@@ -51,7 +57,10 @@ export async function updateCartQuantity(formData: FormData) {
   const action = formData.get('action') as 'increase' | 'decrease';
 
   try {
-    const item = await prisma.cartItem.findUnique({ where: { id: cartItemId } });
+    const item = await prisma.cartItem.findUnique({ 
+      where: { id: cartItemId },
+      include: { product: true }
+    });
     if (!item || item.userId !== session.userId) return;
 
     if (action === 'decrease' && item.quantity > 1) {
@@ -60,6 +69,9 @@ export async function updateCartQuantity(formData: FormData) {
         data: { quantity: item.quantity - 1 }
       });
     } else if (action === 'increase') {
+      if (item.quantity + 1 > item.product.stock) {
+        throw new Error('Maksimal stok tercapai');
+      }
       await prisma.cartItem.update({
         where: { id: cartItemId },
         data: { quantity: item.quantity + 1 }

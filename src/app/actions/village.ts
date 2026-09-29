@@ -28,8 +28,8 @@ export async function submitVillage(formData: FormData) {
         contactPhone,
         latitude,
         longitude,
-        radiusMeters,
-        status: 'APPROVED' // Diubah otomatis ke APPROVED untuk mempermudah pengetesan
+        radiusMeters
+        // status defaults to PENDING in Prisma schema
       }
     })
     return { success: true }

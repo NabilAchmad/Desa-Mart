@@ -4,6 +4,7 @@ import { getSession } from '@/lib/session'
 import Link from 'next/link'
 import { updateOrderStatus } from '@/app/actions/order'
 import ReviewModal from '@/components/ReviewModal'
+import { syncOrderPayment } from '@/lib/order-utils'
 
 export const metadata = { title: 'Pesanan Saya - DesaMart' }
 
@@ -28,17 +29,17 @@ export default async function Pesanan() {
     if (o.status === 'UNPAID') {
       try {
         const midtransStatus = await snap.transaction.status(o.id);
-        const status = midtransStatus.transaction_status;
-        
-        if (status === 'settlement' || status === 'capture') {
-          await prisma.order.update({ where: { id: o.id }, data: { status: 'PENDING' } });
-          o.status = 'PENDING';
-        } else if (status === 'cancel' || status === 'deny' || status === 'expire') {
+        const newStatus = await syncOrderPayment(o.id, midtransStatus.transaction_status);
+        if (newStatus) o.status = newStatus as any;
+      } catch (e) {
+        // Abaikan jika order belum terdaftar di Midtrans, 
+        // tapi jika sudah lebih dari 10 menit, batalkan otomatis
+        const now = new Date();
+        const diffMinutes = (now.getTime() - new Date(o.createdAt).getTime()) / 1000 / 60;
+        if (diffMinutes >= 10) {
           await prisma.order.update({ where: { id: o.id }, data: { status: 'CANCELLED' } });
           o.status = 'CANCELLED';
         }
-      } catch (e) {
-        // Abaikan jika order belum terdaftar di Midtrans
       }
     }
   }
@@ -118,9 +119,26 @@ export default async function Pesanan() {
                </div>
 
                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
-                 <p style={{ margin: 0 }}>Total Belanja</p>
-                 <strong style={{ fontSize: '1.2rem', color: 'var(--text-main)' }}>Rp {o.total.toLocaleString('id-ID')}</strong>
+                 <div style={{ whiteSpace: 'nowrap' }}>
+                   <p style={{ margin: 0 }}>Total Belanja</p>
+                   <strong style={{ fontSize: '1.2rem', color: 'var(--text-main)' }}>Rp {o.total.toLocaleString('id-ID')}</strong>
+                 </div>
+                 <Link href={`/invoice/${o.id}`} target="_blank" className="btn-outline" style={{ padding: '8px 16px', fontSize: '0.9rem', textDecoration: 'none', width: 'auto', whiteSpace: 'nowrap' }}>
+                   Lihat Invoice
+                 </Link>
                </div>
+               
+               {o.status === 'UNPAID' && (
+                 <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border)', textAlign: 'right' }}>
+                   <form action={updateOrderStatus}>
+                     <input type="hidden" name="orderId" value={o.id} />
+                     <input type="hidden" name="status" value="CANCELLED" />
+                     <button type="submit" className="btn-outline" style={{ padding: '8px 16px', fontSize: '0.9rem', borderColor: '#ef4444', color: '#ef4444', width: 'auto' }}>
+                       Batalkan Pesanan
+                     </button>
+                   </form>
+                 </div>
+               )}
                
                {o.status === 'SHIPPED' && (
                  <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border)', textAlign: 'right' }}>

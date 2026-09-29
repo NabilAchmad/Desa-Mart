@@ -6,7 +6,7 @@ export default function DashboardSidebar({ activeOrdersCount, incomingOrdersCoun
   const pathname = usePathname();
 
   return (
-    <aside style={{ width: '250px', flexGrow: 1, minWidth: '200px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <aside style={{ width: '250px', flexGrow: 1, minWidth: '200px', display: 'flex', flexDirection: 'column', gap: '8px', position: 'sticky', top: '100px', height: 'fit-content' }}>
       <div style={{ background: 'var(--surface)', padding: '24px', borderRadius: '16px', border: '1px solid var(--border)' }}>
         <h3 style={{ marginBottom: '24px', fontSize: '1.2rem', color: 'var(--primary-dark)' }}>⚙️ Pengaturan</h3>
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>

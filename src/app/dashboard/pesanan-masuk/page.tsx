@@ -111,28 +111,34 @@ export default async function PesananMasuk() {
                 </div>
 
                 {/* Footer Action */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--surface)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border)' }}>
-                  <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--surface)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border)', flexWrap: 'wrap', gap: '16px' }}>
+                  <div style={{ whiteSpace: 'nowrap' }}>
                     <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-muted)' }}>Total Pendapatan (Pesanan Ini)</p>
                     <strong style={{ fontSize: '1.2rem', color: 'var(--text-main)' }}>Rp {storeTotal.toLocaleString('id-ID')}</strong>
                   </div>
                   
-                  {/* Store Action depending on status */}
-                  {o.status === 'PENDING' && (
-                    <form action={updateOrderStatus}>
-                      <input type="hidden" name="orderId" value={o.id} />
-                      <input type="hidden" name="status" value="SHIPPED" />
-                      <button type="submit" className="btn-primary" style={{ padding: '8px 16px', fontSize: '0.95rem' }}>
-                        Tandai Sudah Dikirim
-                      </button>
-                    </form>
-                  )}
-                  {o.status === 'SHIPPED' && (
-                    <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontStyle: 'italic', margin: 0 }}>Menunggu pembeli mengonfirmasi pesanan sampai.</p>
-                  )}
-                  {o.status === 'UNPAID' && (
-                    <p style={{ fontSize: '0.9rem', color: '#b45309', fontStyle: 'italic', margin: 0 }}>Menunggu pembeli menyelesaikan pembayaran.</p>
-                  )}
+                  <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                    <Link href={`/invoice/${o.id}`} target="_blank" className="btn-outline" style={{ padding: '8px 16px', fontSize: '0.95rem', textDecoration: 'none', width: 'auto', whiteSpace: 'nowrap' }}>
+                      Cetak Invoice
+                    </Link>
+
+                    {/* Store Action depending on status */}
+                    {o.status === 'PENDING' && (
+                      <form action={updateOrderStatus}>
+                        <input type="hidden" name="orderId" value={o.id} />
+                        <input type="hidden" name="status" value="SHIPPED" />
+                        <button type="submit" className="btn-primary" style={{ padding: '8px 16px', fontSize: '0.95rem' }}>
+                          Tandai Sudah Dikirim
+                        </button>
+                      </form>
+                    )}
+                    {o.status === 'SHIPPED' && (
+                      <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontStyle: 'italic', margin: 0 }}>Menunggu pembeli konfirmasi.</p>
+                    )}
+                    {o.status === 'UNPAID' && (
+                      <p style={{ fontSize: '0.9rem', color: '#b45309', fontStyle: 'italic', margin: 0 }}>Menunggu pembayaran.</p>
+                    )}
+                  </div>
                 </div>
 
               </div>

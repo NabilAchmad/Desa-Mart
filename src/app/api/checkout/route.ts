@@ -27,12 +27,22 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Cart is empty' }, { status: 400 });
     }
 
-    const total = cartItems.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
+    // Cek ketersediaan stok
+    for (const item of cartItems) {
+      if (item.quantity > item.product.stock) {
+        return NextResponse.json({ error: `Stok produk ${item.product.name} tidak cukup. (Stok: ${item.product.stock})` }, { status: 400 });
+      }
+    }
+
+    const itemsTotal = cartItems.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
+    const shippingCost = 10000; // Flat ongkir Rp 10.000
+    const total = itemsTotal + shippingCost;
 
     const order = await prisma.order.create({
       data: {
         userId: session.userId,
         total: total,
+        shippingCost: shippingCost,
         status: 'UNPAID',
         shippingAddressId: address || "Alamat tidak diisi",
         items: {
@@ -54,6 +64,10 @@ export async function POST(req: Request) {
         first_name: user?.name,
         email: user?.email,
         phone: user?.phone
+      },
+      custom_expiry: {
+        expiry_duration: 10,
+        unit: "minute"
       }
     };
 

@@ -3,7 +3,12 @@ import { getSession } from '@/lib/session'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { revalidatePath } from 'next/cache'
+import CurrencyInput from '@/components/CurrencyInput'
+import ImageUploadPreview from '@/components/ImageUploadPreview'
 import '@/app/pengajuan-desa/pengajuan.css'
+
+import { writeFile } from 'fs/promises';
+import path from 'path';
 
 async function updateProduct(formData: FormData) {
   "use server"
@@ -22,9 +27,21 @@ async function updateProduct(formData: FormData) {
   });
 
   if (product && product.store.ownerId === session.userId) {
+    let imageUrl = product.imageUrl;
+    const image = formData.get('image') as File | null;
+    
+    if (image && image.size > 0) {
+      const bytes = await image.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      const filename = `${Date.now()}-${image.name.replace(/\s+/g, '-')}`;
+      const uploadPath = path.join(process.cwd(), 'public/uploads', filename);
+      await writeFile(uploadPath, buffer);
+      imageUrl = `/uploads/${filename}`;
+    }
+
     await prisma.product.update({
       where: { id },
-      data: { name, price, stock, description }
+      data: { name, price, stock, description, imageUrl }
     });
     revalidatePath('/dashboard/produk');
     revalidatePath(`/produk/${id}`);
@@ -48,14 +65,20 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
   return (
     <div style={{ background: 'var(--surface)', padding: '40px', borderRadius: '16px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
-        <Link href="/dashboard/produk" className="btn-outline" style={{ border: 'none', background: 'var(--background)' }}>← Kembali</Link>
-        <h1 style={{ margin: 0 }}>Edit Produk</h1>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '24px', marginBottom: '32px', borderBottom: '1px solid var(--border)', paddingBottom: '24px' }}>
+        <Link href="/dashboard/produk" className="btn-outline" style={{ border: '1px solid var(--border)', background: 'var(--background)', padding: '10px 20px', textDecoration: 'none', width: 'max-content', flexShrink: 0 }}>← Kembali</Link>
+        <h1 style={{ margin: 0, fontSize: '2rem' }}>Edit Produk</h1>
       </div>
       
       <form action={updateProduct} className="pengajuan-form" style={{ maxWidth: '600px' }}>
         <input type="hidden" name="id" value={product.id} />
         
+        <div className="input-group">
+          <label>Gambar Produk (Opsional)</label>
+          <ImageUploadPreview name="image" defaultImageUrl={product.imageUrl || undefined} />
+          <p className="help-text">Biarkan kosong jika tidak ingin mengubah gambar saat ini.</p>
+        </div>
+
         <div className="input-group">
           <label>Nama Produk</label>
           <input type="text" name="name" defaultValue={product.name} required />
@@ -67,8 +90,8 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
         </div>
         
         <div className="input-group">
-          <label>Harga (Rp)</label>
-          <input type="number" name="price" defaultValue={product.price} required />
+          <label>Harga</label>
+          <CurrencyInput name="price" required={true} initialValue={product.price} />
         </div>
         
         <div className="input-group">

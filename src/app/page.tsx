@@ -62,16 +62,16 @@ export default async function Home(props: { searchParams: Promise<{ q?: string, 
 
       <header className="hero container">
         <div className="hero-text">
-          <h1>Dari Kebun & Dapur Desa,<br/><span>Langsung ke Rumah Anda.</span></h1>
-          <p>Dukung ekonomi lokal! Temukan hasil panen segar, makanan khas, dan kerajinan tangan otentik langsung dari warga desa.</p>
-          <div style={{ display: 'flex', gap: '16px' }}>
-            <Link href="#produk" className="btn-primary" style={{ padding: '16px 32px', fontSize: '1.1rem', display: 'inline-block' }}>Mulai Belanja</Link>
-            <Link href="#tentang" className="btn-outline" style={{ padding: '16px 32px', fontSize: '1.1rem', display: 'inline-block', border: 'none', background: 'var(--background)' }}>Pelajari Lebih Lanjut</Link>
+          <h1>Dari Kebun & Dapur Desa,<br/><span>Langsung ke Meja Anda.</span></h1>
+          <p>Tinggalkan rantai distribusi yang panjang. Nikmati hasil panen paling segar, makanan khas otentik, dan kerajinan tangan langsung dari pahlawan ekonomi desa.</p>
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+            <Link href="#produk" className="btn-primary" style={{ padding: '16px 32px', fontSize: '1.15rem', whiteSpace: 'nowrap' }}>Mulai Belanja</Link>
+            <Link href="#tentang" className="btn-outline" style={{ padding: '16px 32px', fontSize: '1.15rem', border: 'none', background: 'var(--surface)', boxShadow: 'var(--shadow-sm)', width: 'auto', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>Lebih Lanjut</Link>
           </div>
         </div>
         <div className="hero-image">
           <div className="hero-img-box" style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?auto=format&fit=crop&q=80&w=1000')",
+            backgroundImage: "url('https://images.unsplash.com/photo-1505471768190-275e2ad7b3f9?auto=format&fit=crop&w=1200&q=80')",
             backgroundSize: 'cover',
             backgroundPosition: 'center'
           }}></div>
@@ -80,8 +80,9 @@ export default async function Home(props: { searchParams: Promise<{ q?: string, 
 
       <section id="kategori" className="categories">
         <div className="container">
-          <h2 className="section-title">Telusuri Hasil Desa</h2>
-          <Suspense fallback={<div style={{ textAlign: 'center' }}>Memuat kategori...</div>}>
+          <h2 className="section-title">Telusuri Hasil Alam</h2>
+          <p className="section-subtitle">Pilih kategori produk segar dan otentik langsung dari sumbernya.</p>
+          <Suspense fallback={<div style={{ textAlign: 'center', padding: '40px' }}>Memuat kategori...</div>}>
             <SearchFilter />
           </Suspense>
         </div>
@@ -89,7 +90,15 @@ export default async function Home(props: { searchParams: Promise<{ q?: string, 
 
       <section id="produk" className="products">
         <div className="container">
-          <h2 className="section-title">{q || category ? 'Hasil Pencarian' : 'Pilihan Terbaik Minggu Ini'}</h2>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px' }}>
+            <div>
+              <h2 className="section-title" style={{ margin: 0, textAlign: 'left' }}>{q || category ? 'Hasil Pencarian' : 'Pilihan Terbaik Desa'}</h2>
+              <p style={{ color: 'var(--text-muted)', marginTop: '8px', fontSize: '1.1rem' }}>{q || category ? 'Menampilkan produk yang sesuai' : 'Produk organik dan kerajinan tangan terpopuler minggu ini.'}</p>
+            </div>
+            {!q && !category && (
+              <Link href="/?sort=rating" style={{ color: 'var(--primary)', fontWeight: 600, textDecoration: 'none' }}>Lihat Semua →</Link>
+            )}
+          </div>
           <div className="product-grid">
             
             {products.map(p => {
@@ -99,25 +108,26 @@ export default async function Home(props: { searchParams: Promise<{ q?: string, 
               return (
                 <div key={p.id} className="product-card" style={{ position: 'relative' }}>
                   <Link href={`/produk/${p.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', overflow: 'hidden' }}>
-                      <img src={p.imageUrl!} alt={p.name} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <div className="product-img-wrapper">
+                      <div className="product-badge">🏡 Asli Desa</div>
+                      <img src={p.imageUrl!} alt={p.name} className="product-img" />
                     </div>
                   </Link>
                   <div className="product-info">
                     <span className="product-vendor">🏬 {p.store.name} ({p.store.village.name})</span>
                     <Link href={`/produk/${p.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <h3 className="product-title" style={{ cursor: 'pointer' }}>{p.name}</h3>
+                      <h3 className="product-title" style={{ cursor: 'pointer' }} title={p.name}>{p.name}</h3>
                     </Link>
                     <div className="product-price">Rp {p.price.toLocaleString('id-ID')}</div>
                     
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px', fontSize: '0.85rem' }}>
-                      <span style={{ color: 'var(--text-muted)' }}>Terjual {soldCount}</span>
-                      {avgRating && <span style={{ color: '#eab308', fontWeight: 600 }}>★ {avgRating}</span>}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid var(--border)', fontSize: '0.85rem' }}>
+                      <span style={{ color: 'var(--text-muted)' }}>Terjual <strong>{soldCount}</strong></span>
+                      {avgRating && <span style={{ color: 'var(--secondary)', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '4px' }}>★ {avgRating}</span>}
                     </div>
 
-                    <form action={addToCart}>
+                    <form action={addToCart} style={{ marginTop: '16px' }}>
                       <input type="hidden" name="productId" value={p.id} />
-                      <button type="submit" className="btn-outline" style={{ width: '100%', marginTop: '12px' }}>Tambah ke Keranjang</button>
+                      <button type="submit" className="btn-outline">🛒 Keranjang</button>
                     </form>
                   </div>
                 </div>
@@ -125,7 +135,10 @@ export default async function Home(props: { searchParams: Promise<{ q?: string, 
             })}
 
             {products.length === 0 && (
-              <p style={{ textAlign: 'center', gridColumn: '1 / -1', color: 'var(--text-muted)' }}>Belum ada produk yang ditemukan untuk pencarian ini.</p>
+              <div style={{ gridColumn: '1 / -1', padding: '80px 0', textAlign: 'center', background: 'var(--surface)', borderRadius: '24px', border: '1px dashed var(--border)' }}>
+                <h3 style={{ fontSize: '1.5rem', marginBottom: '8px' }}>Produk Tidak Ditemukan</h3>
+                <p style={{ color: 'var(--text-muted)' }}>Coba gunakan kata kunci atau kategori lain.</p>
+              </div>
             )}
 
           </div>

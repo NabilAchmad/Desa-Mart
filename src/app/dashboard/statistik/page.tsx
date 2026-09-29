@@ -86,9 +86,13 @@ export default async function StatistikToko() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: '16px' }}>
-        <Link href={`/toko/${store.id}`} className="btn-outline" style={{ display: 'inline-block' }}>Lihat Halaman Toko Publik</Link>
-        <Link href="/dashboard/pesanan-masuk" className="btn-primary" style={{ display: 'inline-block' }}>Kelola Pesanan Masuk</Link>
+      <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+        <Link href={`/toko/${store.id}`} className="btn-outline" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 'auto', whiteSpace: 'nowrap', padding: '12px 28px', textDecoration: 'none' }}>
+          Lihat Halaman Toko Publik
+        </Link>
+        <Link href="/dashboard/pesanan-masuk" className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 'auto', whiteSpace: 'nowrap', padding: '12px 28px', textDecoration: 'none' }}>
+          Kelola Pesanan Masuk
+        </Link>
       </div>
     </div>
   )
