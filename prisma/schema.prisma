@@ -48,16 +48,16 @@ model User {
 model CartItem {
   id        String  @id @default(cuid())
   userId    String
-  user      User    @relation(fields: [userId], references: [id])
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   productId String
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   quantity  Int     @default(1)
 }
 
 model ShippingAddress {
   id         String  @id @default(cuid())
   userId     String
-  user       User    @relation(fields: [userId], references: [id])
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   recipient  String
   phone      String
   street     String
@@ -91,7 +91,7 @@ model Store {
   name        String
   description String?
   ownerId     String    @unique
-  owner       User      @relation(fields: [ownerId], references: [id])
+  owner       User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   villageId   String
   village     Village   @relation(fields: [villageId], references: [id])
   latitude    Float // Lokasi toko fisik (untuk validasi radius)
@@ -109,7 +109,7 @@ model Product {
   stock       Int         @default(0)
   imageUrl    String?
   storeId     String
-  store       Store       @relation(fields: [storeId], references: [id])
+  store       Store       @relation(fields: [storeId], references: [id], onDelete: Cascade)
   categoryId  String
   category    Category    @relation(fields: [categoryId], references: [id])
   orderItems  OrderItem[]
@@ -129,7 +129,7 @@ model Category {
 model Order {
   id           String      @id @default(cuid())
   userId       String
-  user         User        @relation(fields: [userId], references: [id])
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   status       OrderStatus @default(UNPAID)
   total        Float
   shippingCost Float       @default(0) // Ongkos kirim
@@ -149,9 +149,9 @@ model Order {
 model OrderItem {
   id        String  @id @default(cuid())
   orderId   String
-  order     Order   @relation(fields: [orderId], references: [id])
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   productId String
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   quantity  Int
   price     Float
 }
@@ -161,11 +161,11 @@ model Review {
   rating    Int
   comment   String?
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   productId String
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   orderId   String?
-  order     Order?   @relation(fields: [orderId], references: [id])
+  order     Order?   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -173,9 +173,9 @@ model Review {
 model Wishlist {
   id        String   @id @default(cuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   productId String
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
   @@unique([userId, productId])

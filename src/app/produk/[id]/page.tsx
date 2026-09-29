@@ -50,14 +50,14 @@ export default async function ProductDetails({ params }: { params: Promise<{ id:
     <div className="container" style={{ padding: '40px 24px', minHeight: '80vh' }}>
       <Link href="/" className="btn-outline" style={{ display: 'inline-block', width: 'fit-content', marginBottom: '24px', border: '1px solid var(--border)', background: 'var(--surface)' }}>← Kembali Belanja</Link>
       
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', marginTop: '24px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '48px', marginTop: '24px' }}>
         {/* Product Image */}
-        <div style={{ background: 'var(--surface)', borderRadius: '24px', overflow: 'hidden', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '400px' }}>
+        <div style={{ flex: '1 1 400px', background: 'var(--surface)', borderRadius: '24px', overflow: 'hidden', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '400px' }}>
           <img src={product.imageUrl!} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
 
         {/* Product Info */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <div>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '16px' }}>
               <span style={{ background: 'var(--primary-light)', color: 'var(--primary-dark)', padding: '6px 14px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: 600 }}>

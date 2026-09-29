@@ -267,3 +267,11 @@
 
 .btn-reject, .btn-delete { background: #ef4444; color: white; }
 .btn-reject:hover, .btn-delete:hover { background: #dc2626; transform: scale(1.05); }
+
+@media (max-width: 768px) {
+  .admin-layout-wrapper { flex-direction: column; }
+  .admin-sidebar { width: 100%; height: auto; position: static; }
+  .admin-topbar { padding: 16px; }
+  .admin-content { padding: 16px; }
+  .admin-table-container { padding: 16px; overflow-x: auto; }
+}

@@ -70,8 +70,8 @@ export default function CartClient({ initialCartItems }: { initialCartItems: Car
   if (!isClient) return null; // Avoid hydration mismatch
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '32px', marginTop: '24px' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '32px', marginTop: '24px' }}>
+      <div style={{ display: 'flex', flex: '1 1 500px', flexDirection: 'column', gap: '24px' }}>
         
         {/* Pilih Semua Bar */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--surface)', padding: '16px 24px', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}>
@@ -148,7 +148,7 @@ export default function CartClient({ initialCartItems }: { initialCartItems: Car
         })}
       </div>
       
-      <div className="form-card" style={{ padding: '32px', height: 'fit-content', position: 'sticky', top: '24px' }}>
+      <div className="form-card" style={{ flex: '1 1 300px', padding: '32px', height: 'fit-content', position: 'sticky', top: '24px' }}>
         <h3 style={{ marginBottom: '16px' }}>Ringkasan Belanja</h3>
         <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border)', paddingBottom: '16px', marginBottom: '16px' }}>
           <span style={{ color: 'var(--text-muted)' }}>Total Harga ({selectedItems.length} barang)</span>

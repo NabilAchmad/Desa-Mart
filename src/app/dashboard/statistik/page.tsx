@@ -63,7 +63,7 @@ export default async function StatistikToko() {
       <h1 style={{ marginBottom: '8px' }}>Statistik Toko: {store.name}</h1>
       <p style={{ color: 'var(--text-muted)', marginBottom: '32px' }}>Pantau performa penjualan dan ulasan pembeli Anda di sini.</p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px', marginBottom: '40px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px', marginBottom: '40px' }}>
         <div style={{ background: 'linear-gradient(135deg, #10b981 0%, #047857 100%)', color: 'white', padding: '24px', borderRadius: '16px', boxShadow: 'var(--shadow-sm)' }}>
           <p style={{ margin: '0 0 8px 0', fontSize: '1.1rem', opacity: 0.9 }}>Total Pendapatan</p>
           <h2 style={{ margin: 0, fontSize: '2rem' }}>Rp {totalRevenue.toLocaleString('id-ID')}</h2>

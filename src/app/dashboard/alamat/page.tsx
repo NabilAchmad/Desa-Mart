@@ -18,9 +18,9 @@ export default async function DaftarAlamat() {
     <div style={{ background: 'var(--surface)', padding: '40px', borderRadius: '16px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}>
       <h1 style={{ marginBottom: '32px' }}>Buku Alamat</h1>
       
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '32px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '32px' }}>
         
-        <div className="form-card" style={{ padding: '32px' }}>
+        <div className="form-card" style={{ flex: '1 1 400px', padding: '32px' }}>
           <h3 style={{ marginBottom: '16px' }}>Tambah Alamat Baru</h3>
           <form action={addAddress} className="pengajuan-form">
             <div className="input-group">
@@ -33,7 +33,7 @@ export default async function DaftarAlamat() {
             </div>
             <div className="input-group">
               <label>Alamat Lengkap (Jalan, RT/RW, No. Rumah)</label>
-              <textarea name="street" rows={3} required style={{ padding: '14px', borderRadius: '8px', border: '1px solid var(--border)' }}></textarea>
+              <textarea name="street" rows={3} required style={{ padding: '14px', borderRadius: '8px', border: '1px solid var(--border)', width: '100%', resize: 'vertical' }}></textarea>
             </div>
             <div className="input-group">
               <label>Kecamatan</label>
@@ -43,21 +43,21 @@ export default async function DaftarAlamat() {
               <label>Kota / Kabupaten</label>
               <input type="text" name="city" required />
             </div>
-            <div style={{ display: 'flex', gap: '16px' }}>
-              <div className="input-group" style={{ flex: 1 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+              <div className="input-group" style={{ flex: '1 1 150px' }}>
                 <label>Provinsi</label>
                 <input type="text" name="province" required />
               </div>
-              <div className="input-group" style={{ flex: 1 }}>
+              <div className="input-group" style={{ flex: '1 1 150px' }}>
                 <label>Kode Pos</label>
                 <input type="text" name="postalCode" required />
               </div>
             </div>
-            <button type="submit" className="btn-primary w-full mt-4">Simpan Alamat</button>
+            <button type="submit" className="btn-primary w-full mt-4" style={{ width: '100%', marginTop: '16px' }}>Simpan Alamat</button>
           </form>
         </div>
 
-        <div>
+        <div style={{ flex: '1 1 400px' }}>
           <h3>Alamat Tersimpan ({addresses.length})</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px' }}>
             {addresses.map(addr => (

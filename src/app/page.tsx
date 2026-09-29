@@ -23,6 +23,7 @@ export default async function Home(props: { searchParams: Promise<{ q?: string, 
   const searchParams = await props.searchParams;
   const q = searchParams.q || '';
   const category = searchParams.category || '';
+  const sort = searchParams.sort || 'newest';
 
   const whereClause: any = {};
   if (q) {
@@ -32,12 +33,29 @@ export default async function Home(props: { searchParams: Promise<{ q?: string, 
     whereClause.category = { name: category };
   }
 
-  const products = await prisma.product.findMany({
+  let orderByClause: any = { createdAt: 'desc' };
+  if (sort === 'price_asc') orderByClause = { price: 'asc' };
+  if (sort === 'price_desc') orderByClause = { price: 'desc' };
+
+  let products = await prisma.product.findMany({
     where: whereClause,
     take: 20,
-    orderBy: { createdAt: 'desc' },
-    include: { store: true, category: true }
+    orderBy: orderByClause,
+    include: { 
+      store: { include: { village: true } }, 
+      category: true,
+      reviews: true,
+      orderItems: { where: { order: { status: 'COMPLETED' } } }
+    }
   });
+
+  if (sort === 'rating') {
+    products = products.sort((a, b) => {
+      const avgA = a.reviews.length > 0 ? a.reviews.reduce((acc, r) => acc + r.rating, 0) / a.reviews.length : 0;
+      const avgB = b.reviews.length > 0 ? b.reviews.reduce((acc, r) => acc + r.rating, 0) / b.reviews.length : 0;
+      return avgB - avgA;
+    });
+  }
 
   return (
     <>
@@ -74,24 +92,37 @@ export default async function Home(props: { searchParams: Promise<{ q?: string, 
           <h2 className="section-title">{q || category ? 'Hasil Pencarian' : 'Pilihan Terbaik Minggu Ini'}</h2>
           <div className="product-grid">
             
-            {products.map(p => (
-              <div key={p.id} className="product-card" style={{ position: 'relative' }}>
-                <Link href={`/produk/${p.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <img src={p.imageUrl!} alt={p.name} className="product-img" style={{ cursor: 'pointer' }} />
-                </Link>
-                <div className="product-info">
-                  <span className="product-vendor">🏬 {p.store.name}</span>
+            {products.map(p => {
+              const soldCount = p.orderItems.reduce((acc, curr) => acc + curr.quantity, 0);
+              const avgRating = p.reviews.length > 0 ? (p.reviews.reduce((acc, r) => acc + r.rating, 0) / p.reviews.length).toFixed(1) : null;
+              
+              return (
+                <div key={p.id} className="product-card" style={{ position: 'relative' }}>
                   <Link href={`/produk/${p.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <h3 className="product-title" style={{ cursor: 'pointer' }}>{p.name}</h3>
+                    <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', overflow: 'hidden' }}>
+                      <img src={p.imageUrl!} alt={p.name} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
                   </Link>
-                  <div className="product-price">Rp {p.price.toLocaleString('id-ID')}</div>
-                  <form action={addToCart}>
-                    <input type="hidden" name="productId" value={p.id} />
-                    <button type="submit" className="btn-outline" style={{ width: '100%', marginTop: '12px' }}>Tambah ke Keranjang</button>
-                  </form>
+                  <div className="product-info">
+                    <span className="product-vendor">🏬 {p.store.name} ({p.store.village.name})</span>
+                    <Link href={`/produk/${p.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <h3 className="product-title" style={{ cursor: 'pointer' }}>{p.name}</h3>
+                    </Link>
+                    <div className="product-price">Rp {p.price.toLocaleString('id-ID')}</div>
+                    
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px', fontSize: '0.85rem' }}>
+                      <span style={{ color: 'var(--text-muted)' }}>Terjual {soldCount}</span>
+                      {avgRating && <span style={{ color: '#eab308', fontWeight: 600 }}>★ {avgRating}</span>}
+                    </div>
+
+                    <form action={addToCart}>
+                      <input type="hidden" name="productId" value={p.id} />
+                      <button type="submit" className="btn-outline" style={{ width: '100%', marginTop: '12px' }}>Tambah ke Keranjang</button>
+                    </form>
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
 
             {products.length === 0 && (
               <p style={{ textAlign: 'center', gridColumn: '1 / -1', color: 'var(--text-muted)' }}>Belum ada produk yang ditemukan untuk pencarian ini.</p>

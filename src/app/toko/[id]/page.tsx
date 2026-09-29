@@ -42,7 +42,7 @@ export default async function StorePage({ params }: { params: Promise<{ id: stri
     <div className="container" style={{ padding: '40px 24px', minHeight: '80vh' }}>
       
       {/* Store Header Banner */}
-      <div style={{ background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)', borderRadius: '24px', padding: '40px', color: 'white', display: 'flex', gap: '32px', alignItems: 'center', marginBottom: '40px', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)', borderRadius: '24px', padding: '40px', color: 'white', display: 'flex', flexWrap: 'wrap', gap: '32px', alignItems: 'center', marginBottom: '40px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: -50, right: -50, width: 200, height: 200, background: 'rgba(255,255,255,0.1)', borderRadius: '50%' }}></div>
         <div style={{ position: 'absolute', bottom: -50, right: 100, width: 150, height: 150, background: 'rgba(255,255,255,0.1)', borderRadius: '50%' }}></div>
         

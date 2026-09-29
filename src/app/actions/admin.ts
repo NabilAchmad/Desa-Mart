@@ -50,6 +50,7 @@ export async function deleteVillage(formData: FormData) {
     revalidatePath('/admin');
   } catch (e) {
     console.error(e);
+    throw new Error('Gagal menghapus desa.');
   }
 }
 
@@ -68,6 +69,7 @@ export async function updateUserRole(formData: FormData) {
     revalidatePath('/admin/pengguna');
   } catch (e) {
     console.error(e);
+    throw new Error('Gagal memperbarui peran pengguna.');
   }
 }
 
@@ -84,5 +86,6 @@ export async function deleteUser(formData: FormData) {
     revalidatePath('/admin/pengguna');
   } catch (e) {
     console.error(e);
+    throw new Error('Gagal menghapus pengguna.');
   }
 }

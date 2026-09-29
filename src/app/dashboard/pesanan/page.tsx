@@ -94,14 +94,22 @@ export default async function Pesanan() {
                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '16px' }}>
                  <strong style={{ fontSize: '0.95rem' }}>Produk yang dipesan:</strong>
                  {o.items.map(item => { const isReviewed = o.reviews.some(r => r.productId === item.productId); return (
-                   <div key={item.id} style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                   <div key={item.id} style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '12px' }}>
                      <img src={item.product.imageUrl || ''} alt={item.product.name} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px', border: '1px solid var(--border)' }} />
                      <div style={{ flex: 1 }}>
                        <p style={{ margin: 0, fontWeight: 600 }}>{item.product.name}</p>
                        <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>{item.quantity} x Rp {item.price.toLocaleString('id-ID')}</p>
                      </div>
+                     {o.status === 'COMPLETED' && !isReviewed && (
+                       <div>
+                         <ReviewModal orderId={o.id} productId={item.productId} />
+                       </div>
+                     )}
+                     {o.status === 'COMPLETED' && isReviewed && (
+                       <span style={{ fontSize: '0.85rem', color: '#16a34a', fontWeight: 600 }}>Telah Diulas ✅</span>
+                     )}
                    </div>
-                 ))}
+                 )})}
                </div>
                
                <div style={{ padding: '12px', background: 'var(--background)', borderRadius: '8px', marginBottom: '16px', border: '1px dashed var(--border)' }}>

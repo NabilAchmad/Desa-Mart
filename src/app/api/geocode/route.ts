@@ -9,7 +9,7 @@ export async function GET(req: Request) {
   }
 
   try {
-    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}`, {
+    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&polygon_geojson=1&q=${encodeURIComponent(q)}`, {
       headers: {
         'User-Agent': 'DesaMart/1.0 (admin@desamart.com)',
       },

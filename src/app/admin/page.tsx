@@ -59,7 +59,7 @@ export default async function AdminDashboard() {
         <div className="admin-table-header">
           <h2>Ikhtisar Penjualan</h2>
         </div>
-        <div style={{ display: 'flex', gap: '24px', alignItems: 'center', background: '#f8fafc', padding: '24px', borderRadius: '16px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', alignItems: 'center', background: '#f8fafc', padding: '24px', borderRadius: '16px' }}>
           <div>
             <p style={{ color: '#64748b', textTransform: 'uppercase', fontSize: '0.85rem', fontWeight: 600, margin: '0 0 8px 0' }}>Total Transaksi Selesai</p>
             <p style={{ fontSize: '2.5rem', fontWeight: 800, margin: 0, color: '#10b981' }}>
