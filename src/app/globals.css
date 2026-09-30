@@ -686,3 +686,50 @@ input:focus, textarea:focus, select:focus {
   border-top: 1px solid var(--border);
 }
 
+
+/* Responsive Media Queries */
+@media (max-width: 992px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 60px 0;
+  }
+  .hero-text h1 { font-size: 3rem; }
+  .hero-text p { margin: 0 auto 32px auto; }
+  .checkout-container, .dashboard-layout { flex-direction: column !important; }
+  .checkout-sidebar { position: static; }
+}
+
+@media (max-width: 768px) {
+  .nav-content {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 12px 0;
+    gap: 12px;
+  }
+  .nav-search {
+    order: 3;
+    width: 100% !important;
+  }
+  .hero-text h1 { font-size: 2.2rem; }
+  .hero-img-box { height: 300px; }
+  .product-grid, .cat-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+  }
+  .feature-grid { flex-direction: column; }
+  .dashboard-menu {
+    flex-direction: row !important;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 8px;
+  }
+  .dashboard-menu a { flex-shrink: 0; }
+  .checkout-container { padding: 16px !important; }
+}
+
+@media (max-width: 480px) {
+  .hero-text h1 { font-size: 1.8rem; }
+  .btn-primary, .btn-outline { width: 100%; text-align: center; }
+  .nav-logo { font-size: 1.3rem; }
+}
