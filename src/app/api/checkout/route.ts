@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   try {
-    const { itemIds, address } = await req.json();
+    const { itemIds, address, selectedShippingCost } = await req.json();
     const user = await prisma.user.findUnique({ where: { id: session.userId } });
     
     if (!itemIds || itemIds.length === 0) {
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
     }
 
     const itemsTotal = cartItems.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
-    const shippingCost = 10000; // Flat ongkir Rp 10.000
+    const shippingCost = selectedShippingCost ? parseInt(selectedShippingCost) : 10000;
     const total = itemsTotal + shippingCost;
 
     const order = await prisma.order.create({

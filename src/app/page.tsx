@@ -4,8 +4,7 @@ import { logoutUser } from '@/app/actions/auth';
 import { prisma } from '@/lib/prisma';
 import { addToCart } from '@/app/actions/cart';
 import { Suspense } from 'react';
-
-import SearchFilter from '@/components/SearchFilter';
+import ProductSort from '@/components/ProductSort';
 
 export const metadata = {
   title: 'DesaMart - Dari Desa ke Rumah Anda',
@@ -63,7 +62,7 @@ export default async function Home(props: { searchParams: Promise<{ q?: string, 
       <header className="hero container">
         <div className="hero-text">
           <h1>Dari Kebun & Dapur Desa,<br/><span>Langsung ke Meja Anda.</span></h1>
-          <p>Tinggalkan rantai distribusi yang panjang. Nikmati hasil panen paling segar, makanan khas otentik, dan kerajinan tangan langsung dari pahlawan ekonomi desa.</p>
+          <p>Beli beras, sayur, sampai kerajinan tangan langsung dari orang desa. Bebas ongkir selangit, bantu petani dan pengrajin lokal tumbuh.</p>
           <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
             <Link href="#produk" className="btn-primary" style={{ padding: '16px 32px', fontSize: '1.15rem', whiteSpace: 'nowrap' }}>Mulai Belanja</Link>
             <Link href="#tentang" className="btn-outline" style={{ padding: '16px 32px', fontSize: '1.15rem', border: 'none', background: 'var(--surface)', boxShadow: 'var(--shadow-sm)', width: 'auto', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>Lebih Lanjut</Link>
@@ -78,26 +77,21 @@ export default async function Home(props: { searchParams: Promise<{ q?: string, 
         </div>
       </header>
 
-      <section id="kategori" className="categories">
-        <div className="container">
-          <h2 className="section-title">Telusuri Hasil Alam</h2>
-          <p className="section-subtitle">Pilih kategori produk segar dan otentik langsung dari sumbernya.</p>
-          <Suspense fallback={<div style={{ textAlign: 'center', padding: '40px' }}>Memuat kategori...</div>}>
-            <SearchFilter />
-          </Suspense>
-        </div>
-      </section>
-
-      <section id="produk" className="products">
+      <section id="produk" className="products" style={{ marginTop: '40px' }}>
         <div className="container">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px' }}>
             <div>
-              <h2 className="section-title" style={{ margin: 0, textAlign: 'left' }}>{q || category ? 'Hasil Pencarian' : 'Pilihan Terbaik Desa'}</h2>
-              <p style={{ color: 'var(--text-muted)', marginTop: '8px', fontSize: '1.1rem' }}>{q || category ? 'Menampilkan produk yang sesuai' : 'Produk organik dan kerajinan tangan terpopuler minggu ini.'}</p>
+              <h2 className="section-title" style={{ margin: 0, textAlign: 'left' }}>{q || category ? 'Hasil Pencarian' : 'Lagi Banyak Dicari'}</h2>
+              <p style={{ color: 'var(--text-muted)', marginTop: '8px', fontSize: '1.1rem' }}>{q || category ? 'Menampilkan produk yang sesuai' : 'Barang-barang yang paling laku minggu ini.'}</p>
             </div>
-            {!q && !category && (
-              <Link href="/?sort=rating" style={{ color: 'var(--primary)', fontWeight: 600, textDecoration: 'none' }}>Lihat Semua →</Link>
-            )}
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+              <Suspense fallback={null}>
+                <ProductSort />
+              </Suspense>
+              {!q && !category && (
+                <Link href="/?sort=rating" style={{ color: 'var(--primary)', fontWeight: 600, textDecoration: 'none' }}>Lihat Semua →</Link>
+              )}
+            </div>
           </div>
           <div className="product-grid">
             
@@ -162,6 +156,14 @@ export default async function Home(props: { searchParams: Promise<{ q?: string, 
             <h3>Produk Segar & Organik</h3>
             <p>Kualitas terjamin karena dipanen dan diproduksi langsung dari alam desa yang bersih dan sehat.</p>
           </div>
+        </div>
+      </section>
+
+      <section className="cta" style={{ textAlign: 'center', padding: '80px 20px', background: 'linear-gradient(135deg, var(--primary-light), var(--primary))', color: 'white', marginTop: '60px' }}>
+        <div className="container">
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '16px', color: 'white' }}>Desa Lu Punya Potensi?</h2>
+          <p style={{ fontSize: '1.2rem', marginBottom: '32px', opacity: 0.9, maxWidth: '600px', margin: '0 auto 32px auto' }}>Ayo gabung sama desa lainnya. Buka toko desa lu sendiri dan jual hasil bumi atau kerajinan langsung ke tangan pembeli.</p>
+          <Link href="/pengajuan-desa" className="btn-primary" style={{ background: 'white', color: 'var(--primary-dark)', padding: '16px 40px', fontSize: '1.2rem', boxShadow: '0 8px 20px rgba(0,0,0,0.1)' }}>Daftarkan Desa Sekarang</Link>
         </div>
       </section>
     </>

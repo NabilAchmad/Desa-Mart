@@ -3,15 +3,28 @@ import { useState, useEffect } from 'react';
 import Script from 'next/script';
 import Link from 'next/link';
 
-export default function CheckoutButton({ clientKey, itemIds, savedAddresses }: { clientKey: string, itemIds: string[], savedAddresses: any[] }) {
+export default function CheckoutButton({ 
+  clientKey, 
+  itemIds, 
+  savedAddresses, 
+  subtotal, 
+  rates 
+}: { 
+  clientKey: string, 
+  itemIds: string[], 
+  savedAddresses: any[], 
+  subtotal: number,
+  rates: any[]
+}) {
   const [loading, setLoading] = useState(false);
-  
-  // Default to the first address in the list (usually the one with isDefault=true due to ordering in server)
+  const [selectedRate, setSelectedRate] = useState<number>(rates[0]?.cost || 10000);
   const [address, setAddress] = useState(
     savedAddresses.length > 0 
       ? `${savedAddresses[0].recipient} (${savedAddresses[0].phone})\n${savedAddresses[0].street}, Kec. ${savedAddresses[0].district}, ${savedAddresses[0].city}, ${savedAddresses[0].province}, ${savedAddresses[0].postalCode}`
       : ""
   );
+
+  const total = subtotal + selectedRate;
 
   const handlePay = async () => {
     if (!address.trim()) {
@@ -24,7 +37,7 @@ export default function CheckoutButton({ clientKey, itemIds, savedAddresses }: {
       const res = await fetch('/api/checkout', { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ itemIds, address })
+        body: JSON.stringify({ itemIds, address, selectedShippingCost: selectedRate })
       });
       const data = await res.json();
       
@@ -57,7 +70,38 @@ export default function CheckoutButton({ clientKey, itemIds, savedAddresses }: {
   return (
     <>
       <Script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key={clientKey} strategy="lazyOnload" />
-      <div style={{ marginTop: '24px' }}>
+      
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '32px', paddingTop: '16px', borderTop: '2px dashed var(--border)' }}>
+        <span style={{ color: 'var(--text-muted)' }}>Subtotal Produk</span>
+        <strong>Rp {subtotal.toLocaleString('id-ID')}</strong>
+      </div>
+
+      <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ color: 'var(--text-muted)' }}>Pilih Kurir</span>
+        <select 
+          value={selectedRate}
+          onChange={(e) => setSelectedRate(Number(e.target.value))}
+          style={{ padding: '8px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--surface)', maxWidth: '250px' }}
+        >
+          {rates.map((r, i) => (
+            <option key={i} value={r.cost}>
+              {r.courier} {r.service} - Rp {r.cost.toLocaleString('id-ID')} ({r.estimatedDays})
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px' }}>
+        <span style={{ color: 'var(--text-muted)' }}>Ongkos Kirim</span>
+        <strong>Rp {selectedRate.toLocaleString('id-ID')}</strong>
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', fontSize: '1.2rem' }}>
+        <strong>Total Belanja</strong>
+        <strong style={{ color: 'var(--primary)' }}>Rp {total.toLocaleString('id-ID')}</strong>
+      </div>
+
+      <div style={{ marginTop: '32px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
           <h4 style={{ margin: 0 }}>Alamat Pengiriman</h4>
           <Link href="/dashboard/alamat" style={{ fontSize: '0.9rem', color: 'var(--primary)' }}>Kelola Alamat</Link>

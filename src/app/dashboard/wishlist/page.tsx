@@ -33,9 +33,9 @@ export default async function WishlistPage() {
 
       {wishlists.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '60px', border: '1px dashed var(--border)', borderRadius: '16px' }}>
-          <h2>Belum ada produk di daftar favorit</h2>
-          <p style={{ color: 'var(--text-muted)', marginBottom: '24px' }}>Mulai jelajahi produk menarik dari berbagai desa sekarang.</p>
-          <Link href="/" className="btn-primary">Mulai Belanja</Link>
+          <h2>Belum ada barang di Favorit</h2>
+          <p style={{ color: 'var(--text-muted)', marginBottom: '24px' }}>Yuk cari produk yang pas buat kamu di beranda.</p>
+          <Link href="/" className="btn-primary">Cari Barang</Link>
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '24px' }}>

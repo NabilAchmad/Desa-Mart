@@ -107,6 +107,7 @@ model Product {
   description String?
   price       Float
   stock       Int         @default(0)
+  weight      Int         @default(1000) // Berat dalam gram
   imageUrl    String?
   storeId     String
   store       Store       @relation(fields: [storeId], references: [id], onDelete: Cascade)
@@ -160,6 +161,7 @@ model Review {
   id        String   @id @default(cuid())
   rating    Int
   comment   String?
+  imageUrl  String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   productId String

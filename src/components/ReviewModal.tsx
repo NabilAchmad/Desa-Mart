@@ -55,7 +55,9 @@ export default function ReviewModal({ productId, orderId, productName }: { produ
 
               <div style={{ marginBottom: '24px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600 }}>Komentar (Opsional)</label>
-                <textarea name="comment" rows={3} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--border)' }} placeholder="Ceritakan pengalaman Anda..."></textarea>
+                <textarea name="comment" rows={3} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--border)', marginBottom: '16px' }} placeholder="Bagaimana kualitas barangnya?"></textarea>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600 }}>Foto Produk (Opsional)</label>
+                <input type="file" name="image" accept="image/*" style={{ width: '100%', padding: '8px', border: '1px solid var(--border)', borderRadius: '8px' }} />
               </div>
 
               <div style={{ display: 'flex', gap: '12px' }}>

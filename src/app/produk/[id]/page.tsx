@@ -91,7 +91,7 @@ export default async function ProductDetails({ params }: { params: Promise<{ id:
           <div>
             <h3 style={{ marginBottom: '12px', fontSize: '1.3rem', fontWeight: 700 }}>Deskripsi Produk</h3>
             <p style={{ lineHeight: 1.8, color: 'var(--text-muted)', fontSize: '1.1rem' }}>
-              {product.description || "Produk otentik yang ditanam dan diproduksi langsung oleh tangan-tangan terampil warga desa. Setiap pembelian Anda langsung mendukung ekonomi lokal desa ini."}
+              {product.description || "Barang asli hasil panen atau karya warga desa. Beli produk ini sama dengan bantu majuin desa mereka."}
             </p>
           </div>
 
@@ -129,7 +129,7 @@ export default async function ProductDetails({ params }: { params: Promise<{ id:
           <div style={{ textAlign: 'center', padding: '60px 20px', background: 'var(--surface)', borderRadius: '32px', border: '1px dashed var(--border)' }}>
             <span style={{ fontSize: '3rem' }}>🌟</span>
             <h3 style={{ margin: '16px 0 8px 0' }}>Belum ada ulasan</h3>
-            <p style={{ color: 'var(--text-muted)' }}>Jadilah yang pertama mendukung dan memberikan ulasan untuk produk desa ini!</p>
+            <p style={{ color: 'var(--text-muted)' }}>Belum ada yang kasih ulasan nih. Ayo beli dan jadi yang pertama review!</p>
           </div>
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '24px' }}>
@@ -148,7 +148,10 @@ export default async function ProductDetails({ params }: { params: Promise<{ id:
                   {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
                 </div>
                 {review.comment && (
-                  <p style={{ margin: 0, color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '1.05rem', fontStyle: 'italic' }}>"{review.comment}"</p>
+                  <p style={{ margin: '0 0 16px 0', color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '1.05rem', fontStyle: 'italic' }}>"{review.comment}"</p>
+                )}
+                {(review as any).imageUrl && (
+                  <img src={(review as any).imageUrl} alt="Review attachment" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '8px', border: '1px solid var(--border)' }} />
                 )}
               </div>
             ))}

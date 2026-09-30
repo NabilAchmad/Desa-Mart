@@ -3,6 +3,7 @@ import { getSession } from '@/lib/session';
 import { logoutUser } from '@/app/actions/auth';
 import { prisma } from '@/lib/prisma';
 import GlobalSearch from './GlobalSearch';
+import CategoryDropdown from './CategoryDropdown';
 
 export default async function Navbar() {
   const session = await getSession();
@@ -32,9 +33,7 @@ export default async function Navbar() {
           DesaMart
         </Link>
 
-        <div style={{ color: '#31353B', fontSize: '0.9rem', cursor: 'pointer', padding: '8px' }}>
-          Kategori
-        </div>
+        <CategoryDropdown />
 
         <GlobalSearch />
 
