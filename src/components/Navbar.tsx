@@ -77,9 +77,8 @@ export default async function Navbar() {
             </div>
           </div>
         ) : (
-          <div style={{ display: 'flex', gap: '12px', marginLeft: 'auto' }}>
-            <Link href="/login" className="btn-outline" style={{ padding: '8px 16px', color: '#03ac0e', borderColor: '#03ac0e', fontWeight: 600 }}>Masuk</Link>
-            <Link href="/login" className="btn-primary" style={{ padding: '8px 16px', background: '#03ac0e', fontWeight: 600 }}>Daftar</Link>
+          <div style={{ display: 'flex', marginLeft: 'auto' }}>
+            <Link href="/login" className="btn-primary" style={{ padding: '8px 24px', background: '#03ac0e', fontWeight: 600, borderRadius: '8px', boxShadow: '0 4px 10px rgba(3, 172, 14, 0.2)' }}>Masuk / Daftar</Link>
           </div>
         )}
       </div>
