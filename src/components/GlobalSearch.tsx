@@ -16,7 +16,7 @@ export default function GlobalSearch() {
   };
 
   return (
-    <form onSubmit={handleSearch} style={{ display: 'flex', gap: '8px', alignItems: 'center', background: '#ffffff', padding: '0 12px', borderRadius: '8px', border: '1px solid #e5e7eb', flex: 1, minWidth: '400px', height: '40px' }}>
+    <form onSubmit={handleSearch} className="nav-search" style={{ display: 'flex', gap: '8px', alignItems: 'center', background: '#ffffff', padding: '0 12px', borderRadius: '8px', border: '1px solid #e5e7eb', flex: 1, minWidth: '100px', maxWidth: '500px', height: '40px' }}>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="11" cy="11" r="8"></circle>
         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>

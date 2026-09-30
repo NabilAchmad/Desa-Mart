@@ -79,7 +79,7 @@ export default async function Home(props: { searchParams: Promise<{ q?: string, 
 
       <section id="produk" className="products" style={{ marginTop: '40px' }}>
         <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px' }}>
+          <div className="products-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px', flexWrap: 'wrap', gap: '16px' }}>
             <div>
               <h2 className="section-title" style={{ margin: 0, textAlign: 'left' }}>{q || category ? 'Hasil Pencarian' : 'Lagi Banyak Dicari'}</h2>
               <p style={{ color: 'var(--text-muted)', marginTop: '8px', fontSize: '1.1rem' }}>{q || category ? 'Menampilkan produk yang sesuai' : 'Barang-barang yang paling laku minggu ini.'}</p>
