@@ -11,7 +11,7 @@ export async function GET(request: Request) {
       where: {
         AND: [
           q ? { name: { contains: q, mode: 'insensitive' } } : {},
-          category ? { category: { equals: category } } : {},
+          category ? { category: { name: category } } : {},
         ]
       },
       include: {
