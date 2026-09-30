@@ -29,7 +29,7 @@ export default async function Navbar() {
   return (
     <nav className="navbar" style={{ padding: '12px 0', borderBottom: '1px solid #f0f0f0', background: 'white' }}>
       <div className="container" style={{ display: 'flex', alignItems: 'center', gap: '24px', maxWidth: '1440px', padding: '0 32px' }}>
-        <Link href="/" style={{ textDecoration: 'none', color: '#03ac0e', fontWeight: 800, fontSize: '1.75rem', letterSpacing: '-0.5px' }}>
+        <Link href="/" style={{ textDecoration: 'none', color: '#9a3412', fontWeight: 800, fontSize: '1.75rem', letterSpacing: '-0.5px' }}>
           DesaMart
         </Link>
 
@@ -69,7 +69,7 @@ export default async function Navbar() {
               </Link>
 
               <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', color: '#31353B' }}>
-                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'linear-gradient(135deg, #03ac0e 0%, #02800a 100%)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', fontWeight: 'bold' }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'linear-gradient(135deg, #9a3412 0%, #7c2d12 100%)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', fontWeight: 'bold', boxShadow: '0 4px 8px rgba(154,52,18,0.3)' }}>
                   {userName.charAt(0).toUpperCase()}
                 </div>
                 <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>{userName}</span>
@@ -78,7 +78,7 @@ export default async function Navbar() {
           </div>
         ) : (
           <div style={{ display: 'flex', marginLeft: 'auto' }}>
-            <Link href="/login" className="btn-primary" style={{ padding: '8px 24px', background: '#03ac0e', fontWeight: 600, borderRadius: '8px', boxShadow: '0 4px 10px rgba(3, 172, 14, 0.2)' }}>Masuk / Daftar</Link>
+            <Link href="/login" className="btn-primary" style={{ padding: '10px 24px', background: 'linear-gradient(135deg, #9a3412 0%, #c2410c 100%)', fontWeight: 700, borderRadius: '50px', boxShadow: '0 4px 14px rgba(154, 52, 18, 0.3)', color: 'white' }}>Masuk / Daftar</Link>
           </div>
         )}
       </div>

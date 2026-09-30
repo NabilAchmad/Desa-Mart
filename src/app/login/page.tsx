@@ -41,7 +41,7 @@ export default function Login() {
           <form className="pengajuan-form" onSubmit={handleSubmit}>
             <div className="input-group">
               <label>Email</label>
-              <input type="email" name="email" placeholder="nama@email.com" required />
+              <input type="email" name="email" placeholder="nama@email.com" onInput={(e) => e.currentTarget.value = e.currentTarget.value.toLowerCase()} required />
             </div>
 
             <div className="input-group">
