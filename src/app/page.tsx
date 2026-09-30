@@ -13,7 +13,7 @@ export const metadata = {
 
 import { redirect } from 'next/navigation';
 
-export default async function Home(props: { searchParams: Promise<{ q?: string, category?: string }> }) {
+export default async function Home(props: { searchParams: Promise<{ q?: string, category?: string, sort?: string }> }) {
   const session = await getSession();
   if (session?.role === 'ADMIN') {
     redirect('/admin');

@@ -103,7 +103,7 @@ export default async function Pesanan() {
                      </div>
                      {o.status === 'COMPLETED' && !isReviewed && (
                        <div>
-                         <ReviewModal orderId={o.id} productId={item.productId} />
+                         <ReviewModal orderId={o.id} productId={item.productId} productName={item.product.name} />
                        </div>
                      )}
                      {o.status === 'COMPLETED' && isReviewed && (
